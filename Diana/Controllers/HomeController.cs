@@ -6,10 +6,16 @@ namespace Diana.Controllers
 {
     public class HomeController : Controller
     {
+        DianaDbContext _context { get; }
+
+        public HomeController(DianaDbContext context)
+        {
+            _context = context;
+        }
+
         public async Task<IActionResult> Index()
         {
-            using DianaDbContext context = new DianaDbContext();
-            var sliders = await context.Sliders.ToListAsync();
+            var sliders = await _context.Sliders.ToListAsync();
             return View(sliders);
         }
     }

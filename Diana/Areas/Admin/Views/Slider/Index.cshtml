@@ -1,5 +1,4 @@
-﻿@using Diana.Models
-@model List<Slider>
+﻿@model List<SliderListItemVM>
 @{
     ViewData["Title"] = "Slider";
 }
@@ -8,6 +7,34 @@
 }
 @section scripts{
     <script src="~/admin/js/demo/datatables-demo.js"></script>
+    @if (TempData["Response"] != null)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        @if ((bool)TempData["Response"] == true)
+        {
+            <script>
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Data deleted",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
+        }
+        else
+        {
+            <script>
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Something went wrong",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            </script>
+        }
+    }
 }
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -34,8 +61,8 @@
                             <td>@item.Text</td>
                             <td><img width="200" src="@item.ImageUrl" /></td>
                             <td>@(item.IsLeft == true ? "left" : item.IsLeft == false ? "right" : "middle")</td>
-                            <td class="text-center"><a class="btn btn-outline-info" href="#">Update</a></td>
-                            <td class="text-center"><a class="btn btn-outline-danger" href="#">Delete</a></td>
+                            <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
+                            <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
                         </tr>
                     }
                 </tbody>

@@ -1,7 +1,14 @@
+using Diana.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<DianaDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:MSSql"]);
+});
 
 var app = builder.Build();
 
