@@ -1,0 +1,56 @@
+﻿@using Diana.Areas.Admin.ViewModels
+@model IEnumerable<AdminProductListItemVM>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Sliders</h6>
+        <a asp-action="Create" class="btn btn-outline-success">Create</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>SellPrice</th>
+                    <th>CostPrice</th>
+                    <th>Discount</th>
+                    <th>Quantity</th>
+                    <th>ImageUrl</th>
+                    <th>Category</th>
+                    <th colspan="2">Action</th>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr class='@(item.IsDeleted ? "bg-danger text-white" : "")'>
+                                <td>@item.Id</td>
+                                <td>@item.Name</td>
+                                <td>@item.SellPrice</td>
+                                <td>@item.CostPrice</td>
+                                <td>@item.Discount</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.ImageUrl</td>
+                                <td>@item.Category?.Name</td>
+                                <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
+                                <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-center" colspan="10">No data</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
