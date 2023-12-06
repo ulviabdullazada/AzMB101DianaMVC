@@ -1,5 +1,6 @@
 ﻿using Diana.Areas.Admin.ViewModels;
 using Diana.Contexts;
+using Diana.Helpers;
 using Diana.Models;
 using Diana.ViewModels.ProductVM;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace Diana.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         DianaDbContext _db { get; }
+        IWebHostEnvironment _env { get; }
 
-        public ProductController(DianaDbContext db)
+        public ProductController(DianaDbContext db, IWebHostEnvironment env)
         {
             _db = db;
+            _env = env;
         }
 
         public IActionResult Index()
@@ -40,6 +43,14 @@ namespace Diana.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateVM vm)
         {
+            if (!vm.ImageFile.IsCorrectType()) 
+            {
+                ModelState.AddModelError("ImageFile", "Wrong file type");
+            }
+            if (!vm.ImageFile.IsValidSize())
+            {
+                ModelState.AddModelError("ImageFile", "Files length must be less than kb");
+            }
             if (vm.CostPrice > vm.SellPrice)
             {
                 ModelState.AddModelError("CostPrice","Sell price must be bigger than cost price");
@@ -62,7 +73,7 @@ namespace Diana.Areas.Admin.Controllers
                 Quantity = vm.Quantity,
                 Description = vm.Description,
                 Discount = vm.Discount,
-                ImageUrl = vm.ImageUrl,
+                ImageUrl = await vm.ImageFile.SaveAsync(PathConstants.Product),
                 CostPrice = vm.CostPrice,
                 SellPrice = vm.SellPrice,
                 CategoryId = vm.CategoryId

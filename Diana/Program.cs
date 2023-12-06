@@ -1,4 +1,5 @@
 using Diana.Contexts;
+using Diana.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,5 +44,8 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+PathConstants.RootPath = builder.Environment.WebRootPath;
 
 app.Run();

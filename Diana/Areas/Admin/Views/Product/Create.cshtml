@@ -7,7 +7,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Create Slider</h6>
     </div>
     <div class="card-body">
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label asp-for="Name"></label>
                 <input asp-for="Name" class="form-control">
@@ -34,9 +34,9 @@
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ImageUrl"></label>
-                <input asp-for="ImageUrl" class="form-control">
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <label asp-for="ImageFile"></label>
+                <input asp-for="ImageFile" accept="image/*" class="form-control">
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="About"></label>

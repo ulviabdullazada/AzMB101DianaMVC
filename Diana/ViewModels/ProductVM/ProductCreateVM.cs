@@ -17,6 +17,6 @@ public class ProductCreateVM
     [Range(0, 100)]
     public float Discount { get; set; }
     public ushort Quantity { get; set; }
-    public string ImageUrl { get; set; }
+    public IFormFile ImageFile { get; set; }
     public int CategoryId { get; set; }
 }

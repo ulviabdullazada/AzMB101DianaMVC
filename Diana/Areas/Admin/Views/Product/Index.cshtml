@@ -35,7 +35,16 @@
                                 <td>@item.CostPrice</td>
                                 <td>@item.Discount</td>
                                 <td>@item.Quantity</td>
-                                <td>@item.ImageUrl</td>
+                                <td>
+                                    @if (item.ImageUrl.Contains("://"))
+                                    {
+                                        <img width="80" src="@item.ImageUrl" />
+                                    }
+                                    else
+                                    {
+                                        <img width="80" src="~/@item.ImageUrl" />
+                                    }
+                                </td>
                                 <td>@item.Category?.Name</td>
                                 <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
                                 <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
