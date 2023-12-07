@@ -4,6 +4,7 @@ using Diana.Helpers;
 using Diana.Models;
 using Diana.ViewModels.ProductVM;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diana.Areas.Admin.Controllers
@@ -32,24 +33,29 @@ namespace Diana.Areas.Admin.Controllers
                 ImageUrl = p.ImageUrl,
                 IsDeleted = p.IsDeleted,
                 Quantity = p.Quantity,
-                SellPrice = p.SellPrice
+                SellPrice = p.SellPrice,
+                Colors = p.ProductColors.Select(pc=>pc.Color)
             }));
         }
         public IActionResult Create()
         {
             ViewBag.Categories = _db.Categories;
+            ViewBag.Colors = new SelectList(_db.Colors,"Id","Name");
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateVM vm)
         {
-            if (!vm.ImageFile.IsCorrectType()) 
+            if (vm.ImageFile != null)
             {
-                ModelState.AddModelError("ImageFile", "Wrong file type");
-            }
-            if (!vm.ImageFile.IsValidSize())
-            {
-                ModelState.AddModelError("ImageFile", "Files length must be less than kb");
+                if (!vm.ImageFile.IsCorrectType())
+                {
+                    ModelState.AddModelError("ImageFile", "Wrong file type");
+                }
+                if (!vm.ImageFile.IsValidSize())
+                {
+                    ModelState.AddModelError("ImageFile", "Files length must be less than kb");
+                }
             }
             if (vm.CostPrice > vm.SellPrice)
             {
@@ -58,12 +64,24 @@ namespace Diana.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.Categories = _db.Categories;
+                ViewBag.Colors = new SelectList(_db.Colors,"Id","Name");
                 return View(vm);
             }
             if (!await _db.Categories.AnyAsync(c=> c.Id == vm.CategoryId))
             {
                 ModelState.AddModelError("CategoryId", "Category doesnt exist");
                 ViewBag.Categories = _db.Categories;
+                ViewBag.Colors = new SelectList(_db.Colors,"Id","Name");
+                return View(vm);
+            }
+            //var a = await (from c in _db.Colors
+            //               where vm.ColorIds.Contains(c.Id)
+            //               select c.Id).CountAsync();
+            if (await _db.Colors.Where(c=>vm.ColorIds.Contains(c.Id)).Select(c=>c.Id).CountAsync() != vm.ColorIds.Count())
+            {
+                ModelState.AddModelError("ColorIds", "Color doesnt exist");
+                ViewBag.Categories = _db.Categories;
+                ViewBag.Colors = new SelectList(_db.Colors, "Id", "Name");
                 return View(vm);
             }
             Product prod = new Product
@@ -76,8 +94,22 @@ namespace Diana.Areas.Admin.Controllers
                 ImageUrl = await vm.ImageFile.SaveAsync(PathConstants.Product),
                 CostPrice = vm.CostPrice,
                 SellPrice = vm.SellPrice,
-                CategoryId = vm.CategoryId
+                CategoryId = vm.CategoryId,
+                ProductColors = vm.ColorIds.Select(id=> new ProductColor
+                {
+                    ColorId = id,
+                }).ToList()
             };
+            //IList<ProductColor> list = new List<ProductColor>();
+            //foreach (var id in vm.ColorIds)
+            //{
+            //    list.Add(new ProductColor
+            //    {
+            //        ColorId = id,
+            //        Product = prod
+            //    });
+            //}
+            //await _db.ProductColors.Add(list);
             await _db.Products.AddAsync(prod);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

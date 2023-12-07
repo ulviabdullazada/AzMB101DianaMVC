@@ -19,5 +19,6 @@ namespace Diana.Areas.Admin.ViewModels
         public string ImageUrl { get; set; }
         public Category? Category { get; set; }
         public bool IsDeleted { get; set; }
+        public IEnumerable<Color> Colors { get; set; }
     }
 }

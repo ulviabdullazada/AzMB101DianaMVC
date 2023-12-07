@@ -55,7 +55,13 @@
                 </select>
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label asp-for="ColorIds">Colors</label>
+                <select class="form-control" asp-for="ColorIds" asp-items='@ViewBag.Colors'>
+                    <option disabled selected>Select Color</option>
+                </select>
+                <span asp-validation-for="ColorIds" class="text-danger"></span>
+            </div>
             <button class="btn btn-success">Submit!</button>
 
         </form>

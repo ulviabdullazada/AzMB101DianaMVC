@@ -19,4 +19,5 @@ public class ProductCreateVM
     public ushort Quantity { get; set; }
     public IFormFile ImageFile { get; set; }
     public int CategoryId { get; set; }
+    public IEnumerable<int> ColorIds { get; set; }
 }
