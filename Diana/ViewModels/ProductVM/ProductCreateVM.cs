@@ -18,6 +18,7 @@ public class ProductCreateVM
     public float Discount { get; set; }
     public ushort Quantity { get; set; }
     public IFormFile ImageFile { get; set; }
+    public IEnumerable<IFormFile>? Images { get; set; }
     public int CategoryId { get; set; }
     public IEnumerable<int> ColorIds { get; set; }
 }

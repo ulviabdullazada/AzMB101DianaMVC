@@ -1,4 +1,5 @@
 ﻿using Diana.Contexts;
+using Diana.Models;
 using Diana.ViewModels.ColorVM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,7 @@ namespace Diana.Areas.Admin.Controllers
             await _context.Colors.AddAsync(new Models.Color
             {
                 Name = vm.Name,
-                Hexcode = vm.HexCode.Substring(1)
+                Hexcode = vm.Hexcode.Substring(1)
             });
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

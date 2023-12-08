@@ -57,6 +57,27 @@ namespace Diana.Areas.Admin.Controllers
                     ModelState.AddModelError("ImageFile", "Files length must be less than kb");
                 }
             }
+            if (vm.Images != null)
+            {
+                //string message = string.Empty;
+                foreach (var img in vm.Images)
+                {
+                    if (!img.IsCorrectType())
+                    {
+                        ModelState.AddModelError("", "Wrong file type (" + img.FileName + ")");
+                        //message += "Wrong file type (" + img.FileName + ") \r\n";
+                    }
+                    if (!img.IsValidSize(200))
+                    {
+                        ModelState.AddModelError("", "Files length must be less than kb (" + img.FileName + ")");
+                        //message += "Files length must be less than kb (" + img.FileName + ") \r\n";
+                    }
+                }
+                //if (!string.IsNullOrEmpty(message))
+                //{
+                //    ModelState.AddModelError("Images", message);
+                //}
+            }
             if (vm.CostPrice > vm.SellPrice)
             {
                 ModelState.AddModelError("CostPrice","Sell price must be bigger than cost price");
@@ -98,6 +119,10 @@ namespace Diana.Areas.Admin.Controllers
                 ProductColors = vm.ColorIds.Select(id=> new ProductColor
                 {
                     ColorId = id,
+                }).ToList(),
+                ProductImages = vm.Images.Select(i => new ProductImage
+                {
+                    ImageUrl = i.SaveAsync(PathConstants.Product).Result
                 }).ToList()
             };
             //IList<ProductColor> list = new List<ProductColor>();

@@ -2,6 +2,16 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    .salam ul li{
+        /* list-style:none !important; */
+        display:block;
+        margin: 2.5px 0;
+    }
+    .salam ul{
+        padding: 0;
+    }
+</style>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Create Slider</h6>
@@ -37,6 +47,12 @@
                 <label asp-for="ImageFile"></label>
                 <input asp-for="ImageFile" accept="image/*" class="form-control">
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Images"></label>
+                <input asp-for="Images" accept="image/*" class="form-control">
+                <div class="text-danger salam" asp-validation-summary=ModelOnly></div>
+                @* <span asp-validation-for="Images" class="text-danger"></span> *@
             </div>
             <div class="form-group">
                 <label asp-for="About"></label>
