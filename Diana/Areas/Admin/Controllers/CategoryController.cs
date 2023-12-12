@@ -15,9 +15,14 @@ namespace Diana.Areas.Admin.Controllers
             _db = db;
         }
 
-        public async Task<IActionResult> Index()
+        /*public async Task<IActionResult> Index()
         {
             return View(await _db.Categories.Select(c => new CategoryListItemVM {Id = c.Id, Name = c.Name}).ToListAsync());
+        }*/
+
+        public EmptyResult Index()
+        {
+            return new EmptyResult();
         }
         public IActionResult Create()
         {

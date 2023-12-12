@@ -1,0 +1,160 @@
+﻿@model ProductUpdateVM
+@{
+    ViewData["Title"] = "Update";
+}
+
+<style>
+    .salam ul li {
+        /* list-style:none !important; */
+        display: block;
+        margin: 2.5px 0;
+    }
+
+    .salam ul {
+        padding: 0;
+    }
+</style>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Create Slider</h6>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SellPrice"></label>
+                <input asp-for="SellPrice" class="form-control">
+                <span asp-validation-for="SellPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CostPrice"></label>
+                <input asp-for="CostPrice" class="form-control">
+                <span asp-validation-for="CostPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount"></label>
+                <input asp-for="Discount" class="form-control">
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity"></label>
+                <input asp-for="Quantity" class="form-control">
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="CoverImageUrl" />
+                <img width="90" src="~/@Model.CoverImageUrl" />
+                <span asp-validation-for="CoverImageUrl" class="text-danger"></span>
+                <label asp-for="ImageFile"></label>
+                <input asp-for="ImageFile" accept="image/*" class="form-control">
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @if (Model.ImageUrls.Count() > 0)
+                {
+                    <div class="row">
+                        @foreach (var url in Model.ImageUrls)
+                        {
+                            <div class="col-1 position-relative">
+                                <a asp-action="DeleteImageCSharp" asp-route-id="@url.Id" style="cursor:pointer; font-size:20px;" class="position-absolute top-0 text-danger del-img">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                <img class="w-100" src="~/@url.Url" />
+                            </div>
+                        }
+                    </div>
+                }
+                <span asp-validation-for="ImageUrls" class="text-danger"></span>
+                <label asp-for="Images"></label>
+                <input asp-for="Images" accept="image/*" class="form-control">
+                <div class="text-danger salam" asp-validation-summary=ModelOnly></div>
+                @* <span asp-validation-for="Images" class="text-danger"></span> *@
+            </div>
+            <div class="form-group">
+                <label asp-for="About"></label>
+                <textarea asp-for="About" class="form-control"></textarea>
+                <span asp-validation-for="About" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId">Categories</label>
+                <select class="form-control" asp-for="CategoryId" asp-items='@ViewBag.Categories'>
+                    <option disabled>Select category</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ColorIds">Colors</label>
+                <select class="form-control" asp-for="ColorIds" asp-items='@ViewBag.Colors'>
+                    <option disabled>Select Color</option>
+                </select>
+                <span asp-validation-for="ColorIds" class="text-danger"></span>
+            </div>
+            <button class="btn btn-success">Submit!</button>
+
+        </form>
+    </div>
+</div>
+@section scripts {
+   @*  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(".del-img").click(function(ev){
+            ev.preventDefault();
+            var url = $(this).attr("href");
+            // alert($(this).attr("data-id"));
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(url)
+                    .then(data => {
+                        console.log(data)
+                        if (data.status == 200) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                        else if (data.status == 404) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "File doenst exist!",
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something went wrong!",
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                        });
+                    })
+                }
+            });
+        })
+        
+    </script> *@
+}
