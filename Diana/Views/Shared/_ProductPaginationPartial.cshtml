@@ -1,0 +1,59 @@
+﻿@model PaginatonVM<IEnumerable<AdminProductListItemVM>>
+<div class="row pag-prods">
+    @foreach (var item in Model.Items)
+    {
+        <div class="col-md-3">
+            <div class="product-item">
+                <div class="inner-content">
+                    <div class="product-thumb">
+                        <a href="shop-single.html">
+                            <img class="w-100" src="~/@item.ImageUrl" alt="Image-HasTech">
+                        </a>
+                        <div class="product-action">
+                            <div class="addto-wrap">
+                                <a class="add-cart" href="shop-cart.html">
+                                    <span class="icon">
+                                        <i class="bardy bardy-shopping-cart"></i>
+                                        <i class="hover-icon bardy bardy-shopping-cart"></i>
+                                    </span>
+                                </a>
+                                <a class="add-quick-view" href="javascript:void(0);">
+                                    <span class="icon">
+                                        <i class="bardy bardy-quick-view"></i>
+                                        <i class="hover-icon bardy bardy-quick-view"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-desc">
+                        <div class="product-info">
+                            <h4 class="title"><a href="shop-single.html">@item.Name</a></h4>
+                            <div class="prices">
+                                @if (item.Discount != 0)
+                                {
+                                    <span class="price">$ @(item.SellPrice - (item.SellPrice * (decimal)item.Discount / 100)) </span>
+                                    <span class="price-old">$ @item.SellPrice</span>
+                                }
+                                else
+                                {
+                                    <span class="price">$ @item.SellPrice</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<nav aria-label="Page navigation example">
+    <ul id="prod-pag" class="pagination">
+        <li class="page-item  @(Model.HasPrev ? "" : "disabled")"><a class='page-link' asp-action="ProductPagination" asp-route-page="@(Model.CurrentPage - 1)" asp-route-count="4">Previous</a></li>
+        @for (int i = 1; i <= Model.LastPage; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@i" asp-route-count="4">@i</a></li>
+        }
+        <li class="page-item @(Model.HasNext ? "" : "disabled")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@(Model.CurrentPage + 1)" asp-route-count="4">Next</a></li>
+    </ul>
+</nav>

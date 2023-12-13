@@ -2,7 +2,84 @@
 @{
     ViewData["Title"] = "Index";
 }
+@section scripts{
+    <script>
 
+        $("#featured").on("click", "#prod-pag a", function (ev) {
+            ev.preventDefault();
+            fetch($(this).attr("href"))
+                .then(res => res.text())
+                .then(data => $("#featured").html(data))
+        })
+
+        // $("#prod-pag a").click(function(ev){
+                // ev.preventDefault();
+                    // var url = $(this).attr("href")
+                    // var html = "";
+                    // fetch(url)
+                    // .then(res => res.json())
+                    // .then(data => {
+                    //     data.items.forEach(item => {
+                    //         console.log(item)
+                    //         html += `
+                    //                     <div class="col-md-3">
+                    //                                             <div class="product-item">
+                    //                                                 <div class="inner-content">
+                    //                                                     <div class="product-thumb">
+                    //                                                         <a href="shop-single.html">
+                    //                                                             <img class="w-100" src="/${item.imageUrl}" alt="Image-HasTech">
+                    //                                                         </a>
+                    //                                                         <div class="product-action">
+                    //                                                             <div class="addto-wrap">
+                    //                                                                 <a class="add-cart" href="shop-cart.html">
+                    //                                                                     <span class="icon">
+                    //                                                                         <i class="bardy bardy-shopping-cart"></i>
+                    //                                                                         <i class="hover-icon bardy bardy-shopping-cart"></i>
+                    //                                                                     </span>
+                    //                                                                 </a>
+                    //                                                                 <a class="add-quick-view" href="javascript:void(0);">
+                    //                                                                     <span class="icon">
+                    //                                                                         <i class="bardy bardy-quick-view"></i>
+                    //                                                                         <i class="hover-icon bardy bardy-quick-view"></i>
+                    //                                                                     </span>
+                    //                                                                 </a>
+                    //                                                             </div>
+                    //                                                         </div>
+                    //                                                     </div>
+                    //                                                     <div class="product-desc">
+                    //                                                         <div class="product-info">
+                    //                                                             <h4 class="title"><a href="shop-single.html">${item.name}</a></h4>
+                    //                                                             <div class="star-content">
+                    //                                                                 <i class="fa fa-star-o"></i>
+                    //                                                                 <i class="fa fa-star-o"></i>
+                    //                                                                 <i class="fa fa-star-o"></i>
+                    //                                                                 <i class="fa fa-star-o"></i>
+                    //                                                                 <i class="fa fa-star-o"></i>
+                    //                                                             </div>
+                    //                                                             <div class="prices">
+                    //                                                                 <span class="price">$ ${item.sellPrice}</span>
+                    //                                                             </div>
+                    //                                                         </div>
+                    //                                                     </div>
+                    //                                                 </div>
+                    //                                             </div>
+                    //                                         </div>
+                    //             `
+                    //     })
+                    //     var pag = ""
+                    //     for (let i = 1; i <= data.lastPage; i++) {
+                    //         pag += `<li class="page-item ${i == data.CurrentPage ?'active' : ''}" >
+                    //             <a class="page-link" href=''>${i}</a>
+                    //         </li >`
+                    //     }
+                    //     $("#prod-pag").html(pag)
+                    //     return html;
+                    // })
+                    // .then(data => $(".pag-prods").html(data))
+
+        // })
+    </script>
+}
 <main class="main-content">
     <!--== Start Hero Area Wrapper ==-->
     <section class="home-slider-area">
@@ -63,120 +140,7 @@
                         </ul>
                         <div class="tab-content product-category-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="featured" role="tabpanel" aria-labelledby="featured-tab">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="swiper-container swiper-nav swiper-slide-gap product-swiper-pagination product-slider-container">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
-                                                    <!--== Start Shop Item ==-->
-                                                    <div class="product-item">
-                                                        <div class="inner-content">
-                                                            <div class="product-thumb">
-                                                                <a href="shop-single.html">
-                                                                    <img class="w-100" src="assets/img/shop/1.jpg" alt="Image-HasTech">
-                                                                </a>
-                                                                <div class="product-action">
-                                                                    <div class="addto-wrap">
-                                                                        <a class="add-cart" href="shop-cart.html">
-                                                                            <span class="icon">
-                                                                                <i class="bardy bardy-shopping-cart"></i>
-                                                                                <i class="hover-icon bardy bardy-shopping-cart"></i>
-                                                                            </span>
-                                                                        </a>
-                                                                        <a class="add-wishlist" href="wishlist.html">
-                                                                            <span class="icon">
-                                                                                <i class="bardy bardy-wishlist"></i>
-                                                                                <i class="hover-icon bardy bardy-wishlist"></i>
-                                                                            </span>
-                                                                        </a>
-                                                                        <a class="add-quick-view" href="javascript:void(0);">
-                                                                            <span class="icon">
-                                                                                <i class="bardy bardy-quick-view"></i>
-                                                                                <i class="hover-icon bardy bardy-quick-view"></i>
-                                                                            </span>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-desc">
-                                                                <div class="product-info">
-                                                                    <h4 class="title"><a href="shop-single.html">1. New and sale badge product</a></h4>
-                                                                    <div class="star-content">
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                    </div>
-                                                                    <div class="prices">
-                                                                        <span class="price">Tk 110.00 </span>
-                                                                        <span class="price-old">Tk 130.00</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--== End Shop Item ==-->
-                                                    <!--== Start Shop Item ==-->
-                                                    <div class="product-item">
-                                                        <div class="inner-content">
-                                                            <div class="product-thumb">
-                                                                <a href="shop-single.html">
-                                                                    <img class="w-100" src="assets/img/shop/2.jpg" alt="Image-HasTech">
-                                                                </a>
-                                                                <div class="product-action">
-                                                                    <div class="addto-wrap">
-                                                                        <a class="add-cart" href="shop-cart.html">
-                                                                            <span class="icon">
-                                                                                <i class="bardy bardy-shopping-cart"></i>
-                                                                                <i class="hover-icon bardy bardy-shopping-cart"></i>
-                                                                            </span>
-                                                                        </a>
-                                                                        <a class="add-wishlist" href="wishlist.html">
-                                                                            <span class="icon">
-                                                                                <i class="bardy bardy-wishlist"></i>
-                                                                                <i class="hover-icon bardy bardy-wishlist"></i>
-                                                                            </span>
-                                                                        </a>
-                                                                        <a class="add-quick-view" href="javascript:void(0);">
-                                                                            <span class="icon">
-                                                                                <i class="bardy bardy-quick-view"></i>
-                                                                                <i class="hover-icon bardy bardy-quick-view"></i>
-                                                                            </span>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="product-desc">
-                                                                <div class="product-info">
-                                                                    <h4 class="title"><a href="shop-single.html">2. New badge product</a></h4>
-                                                                    <div class="star-content">
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                        <i class="fa fa-star-o"></i>
-                                                                    </div>
-                                                                    <div class="prices">
-                                                                        <span class="price">Tk 80.00 </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--== End Shop Item ==-->
-                                                </div>
-                                            </div>
-
-                                            <!--== Add Swiper navigation Buttons ==-->
-                                            <div class="swiper-button swiper-button-prev"><i class="fa fa-angle-left"></i></div>
-                                            <div class="swiper-button swiper-button-next"><i class="fa fa-angle-right"></i></div>
-
-                                            <!--== Add Swiper Pagination Buttons ==-->
-                                            <div class="swiper-pagination"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <partial model="Model.PaginatedProducts" name="_ProductPaginationPartial" />
                             </div>
                             <div class="tab-pane fade" id="chair" role="tabpanel" aria-labelledby="chair-tab">
                                 <div class="row">
