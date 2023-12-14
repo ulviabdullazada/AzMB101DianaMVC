@@ -2,6 +2,7 @@
 using Diana.Contexts;
 using Diana.Helpers;
 using Diana.Models;
+using Diana.ViewModels.CommonVM;
 using Diana.ViewModels.ProductVM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -22,21 +23,50 @@ namespace Diana.Areas.Admin.Controllers
             _env = env;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
-            return View(_db.Products.Select(p=> new AdminProductListItemVM{
-                Id= p.Id,
-                Name= p.Name,
-                CostPrice= p.CostPrice,
-                Discount = p.Discount,
-                Category = p.Category,
-                ImageUrl = p.ImageUrl,
-                IsDeleted = p.IsDeleted,
-                Quantity = p.Quantity,
-                SellPrice = p.SellPrice,
-                Colors = p.ProductColors.Select(pc=>pc.Color)
-            }));
+            int total = await _db.Products.CountAsync();
+            var data = new PaginatonVM<IEnumerable<AdminProductListItemVM>>(
+                total,
+                1, 
+                (int)Math.Ceiling((decimal)total / 8), 
+                await _db.Products.AddPagination(1, 8).Select(p => new AdminProductListItemVM
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    CostPrice = p.CostPrice,
+                    Discount = p.Discount,
+                    Category = p.Category,
+                    ImageUrl = p.ImageUrl,
+                    IsDeleted = p.IsDeleted,
+                    Quantity = p.Quantity,
+                    SellPrice = p.SellPrice,
+                    Colors = p.ProductColors.Select(pc => pc.Color)
+                }).ToListAsync());
+            
+            return View(data);
+        }
+        public async Task<IActionResult> ProductPagination(int page, int count)
+        {
+            int total = await _db.Products.CountAsync();
+            var data = new PaginatonVM<IEnumerable<AdminProductListItemVM>>(
+                total,
+                page,
+                (int)Math.Ceiling((decimal)total / count),
+                await _db.Products.AddPagination(page, count).Select(p => new AdminProductListItemVM
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    CostPrice = p.CostPrice,
+                    Discount = p.Discount,
+                    Category = p.Category,
+                    ImageUrl = p.ImageUrl,
+                    IsDeleted = p.IsDeleted,
+                    Quantity = p.Quantity,
+                    SellPrice = p.SellPrice,
+                    Colors = p.ProductColors.Select(pc => pc.Color)
+                }).ToListAsync());
+            return PartialView("_PaginationProductPartial",data);
         }
         public IActionResult Create()
         {
@@ -44,6 +74,7 @@ namespace Diana.Areas.Admin.Controllers
             ViewBag.Colors = new SelectList(_db.Colors,"Id","Name");
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateVM vm)
         {

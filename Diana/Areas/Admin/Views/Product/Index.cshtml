@@ -1,15 +1,26 @@
-﻿@using Diana.Areas.Admin.ViewModels
-@model IEnumerable<AdminProductListItemVM>
+﻿@model PaginatonVM<IEnumerable<AdminProductListItemVM>>
 @{
     ViewData["Title"] = "Index";
 }
-
+@section scripts{
+    <script>
+        $(".card").on("click", "#prod-pag a", function (e) {
+            e.preventDefault();
+            fetch($(this).attr('href'))
+                .then(res => res.text())
+                .then(data => { console.log(data); $(".area").html(data) })
+        })
+    </script>
+}
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Sliders</h6>
         <a asp-action="Create" class="btn btn-outline-success">Create</a>
     </div>
-    <div class="card-body">
+    <div class="area">
+        <partial name="_PaginationProductPartial" model="Model" />
+    </div>
+    @*<div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -69,6 +80,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> *@
 </div>
 

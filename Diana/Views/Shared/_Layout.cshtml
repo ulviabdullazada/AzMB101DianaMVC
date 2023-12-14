@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Diana.Helpers
+@using Diana.Models
+@inject LayoutService service;
+@{
+    Setting setting = await service.GetSettingsAsync();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -36,6 +43,12 @@
     <!--== Main Style CSS ==-->
     <link href="~/assets/css/style.css" rel="stylesheet" />
     @await RenderSectionAsync("styles", false)
+    <style>
+        .user-menu .title svg{
+            width:30px;
+            height:30px;
+        }
+    </style>
     <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -66,7 +79,7 @@
                     <div class="col">
                         <div class="header-logo-area">
                             <a href="index.html">
-                                <img class="logo-main" src="~/assets/img/logo.png" alt="Logo" />
+                                <img class="logo-main" src="~/@setting.Logo" alt="Logo" />
                                 <img class="logo d-none" src="~/assets/img/logo-light.png" alt="Logo" />
                             </a>
                         </div>
@@ -91,7 +104,7 @@
                         <div class="header-action-area">
                             <ul class="header-action">
                                 <li class="user-menu">
-                                    <a class="title" href="javascript:;"><i class="fa fa-user-o"></i></a>
+                                    <a class="title" href="javascript:;">@Html.Raw(setting.AccountIcon)</a>
                                     <ul class="user-dropdown">
                                         <li class="user">
                                             <ul>
@@ -175,13 +188,13 @@
                             <div class="widget-item">
                                 <div class="footer-logo-area">
                                     <a href="index.html">
-                                        <img class="logo-main" src="~/assets/img/logo-light.png" alt="Logo" />
+                                        <img class="logo-main" src="~/@setting.Logo" alt="Logo" />
                                     </a>
                                 </div>
                                 <p>People have been using natural objects, such as tree stumps, rocks and moss, as furniture since the beginning of human civilisation.</p>
-                                <p>Your current address goes to here,120 example, country.</p>
-                                <p>+12546 687 987  / +15425 987 541</p>
-                                <p>demo@example.com www.example.com</p>
+                                <p>@setting.Address</p>
+                                <p>@setting.Number1  / @setting.Number2</p>
+                                <p>@setting.Email www.example.com</p>
                             </div>
                             <!--== End widget Item ==-->
                         </div>

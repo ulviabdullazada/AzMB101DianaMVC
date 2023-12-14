@@ -1,0 +1,74 @@
+﻿@model PaginatonVM<IEnumerable<AdminProductListItemVM>>
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>SellPrice</th>
+                    <th>CostPrice</th>
+                    <th>Discount</th>
+                    <th>Quantity</th>
+                    <th>ImageUrl</th>
+                    <th>Category</th>
+                    <th>Colors</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Items != null)
+                {
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr class='@(item.IsDeleted ? "bg-danger text-white" : "")'>
+                            <td>@item.Id</td>
+                            <td>@item.Name</td>
+                            <td>@item.SellPrice</td>
+                            <td>@item.CostPrice</td>
+                            <td>@item.Discount</td>
+                            <td>@item.Quantity</td>
+                            <td>
+                                @if (item.ImageUrl.Contains("://"))
+                                {
+                                    <img width="80" src="@item.ImageUrl" />
+                                }
+                                else
+                                {
+                                    <img width="80" src="~/@item.ImageUrl" />
+                                }
+                            </td>
+                            <td>@item.Category?.Name</td>
+                            @if (item.Colors == null || item.Colors.Count() == 0)
+                            {
+                                <td>No color</td>
+                            }
+                            else
+                            {
+                                <td>@string.Join(",",item.Colors.Select(x=>x.Name))</td>
+                            }
+                            <td class="text-center"><a class="btn btn-outline-info" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
+                            <td class="text-center"><a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td class="text-center" colspan="10">No data</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul id="prod-pag" class="pagination">
+            <li class="page-item  @(Model.HasPrev ? "" : "disabled")"><a class='page-link' asp-action="ProductPagination" asp-route-page="@(Model.CurrentPage - 1)" asp-route-count="8">Previous</a></li>
+            @for (int i = 1; i <= Model.LastPage; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@i" asp-route-count="8">@i</a></li>
+            }
+            <li class="page-item @(Model.HasNext ? "" : "disabled")"><a class="page-link" asp-action="ProductPagination" asp-route-page="@(Model.CurrentPage + 1)" asp-route-count="8">Next</a></li>
+        </ul>
+    </nav>
+</div>

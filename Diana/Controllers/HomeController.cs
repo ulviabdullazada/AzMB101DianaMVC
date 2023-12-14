@@ -35,14 +35,6 @@ namespace Diana.Controllers
             PaginatonVM<IEnumerable<AdminProductListItemVM>> pag = new(count, 1, (int)Math.Ceiling((decimal)count / take), items);
             HomeVM vm = new HomeVM
             {
-                Sliders = await _context.Sliders.Select(s => new SliderListItemVM
-                {
-                    Id = s.Id,
-                    ImageUrl = s.ImageUrl,
-                    IsLeft = s.IsLeft,
-                    Title = s.Title,
-                    Text = s.Text,
-                }).ToListAsync(),
                 Products = await _context.Products.Where(p => !p.IsDeleted).Select(p => new AdminProductListItemVM {
                     Id = p.Id,
                     Category = p.Category,

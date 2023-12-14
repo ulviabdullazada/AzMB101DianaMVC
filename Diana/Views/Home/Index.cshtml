@@ -82,34 +82,7 @@
 }
 <main class="main-content">
     <!--== Start Hero Area Wrapper ==-->
-    <section class="home-slider-area">
-        <div class="swiper-container swiper-slide-gap home-slider-container default-slider-container">
-            <div class="swiper-wrapper home-slider-wrapper slider-default">
-                @foreach (var slider in Model.Sliders)
-                {
-                    <div class="swiper-slide">
-                        <div class="slider-content-area" data-bg-img="@slider.ImageUrl">
-                            <div class="container">
-                                <div class="row align-items-center">
-                                    <div class="col-12">
-                                        <div class='slider-content @(slider.IsLeft == true ? "text-start" : slider.IsLeft == false ? "text-end" : "text-center")'>
-                                            <h5 class="sub-title">@slider.Title</h5>
-                                            <h2 class="title">@slider.Text</h2>
-                                            <a class="btn-slider" href="shop.html">Shop Now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <!--== Add Swiper Arrows ==-->
-            <div class="swiper-button-next"><i class="fa fa-angle-right"></i></div>
-            <div class="swiper-button-prev"><i class="fa fa-angle-left"></i></div>
-        </div>
-    </section>
+    @await Component.InvokeAsync("Slider")
     <!--== End Hero Area Wrapper ==-->
     <!--== Start Product Area Wrapper ==-->
     <section class="product-area product-list-area">
@@ -971,94 +944,8 @@
     </section>
     <!--== End Single Banner Wrapper ==-->
     <!--== Start Product Area Wrapper ==-->
-    <section class="product-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 m-auto">
-                    <div class="section-title text-center">
-                        <h2 class="title">New Arrivals</h2>
-                        <div class="desc">
-                            <p>Some of our customers say that they trust us and buy our product without any hesitation because they believe us and always happy to buy our product.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="swiper-container swiper-nav swiper-slide-gap product-slider-container">
-                        <div class="swiper-wrapper">
-                            @foreach (var item in Model.Products)
-                            {
-                                <div class="swiper-slide">
-                                    <!--== Start Shop Item ==-->
-                                    <div class="product-item">
-                                        <div class="inner-content">
-                                            <div class="product-thumb">
-                                                <a href="shop-single.html">
-                                                    <img class="w-100" src="~/@item.ImageUrl" alt="Image-HasTech">
-                                                </a>
-                                                <div class="product-action">
-                                                    <div class="addto-wrap">
-                                                        <a class="add-cart" href="shop-cart.html">
-                                                            <span class="icon">
-                                                                <i class="bardy bardy-shopping-cart"></i>
-                                                                <i class="hover-icon bardy bardy-shopping-cart"></i>
-                                                            </span>
-                                                        </a>
-                                                        <a class="add-wishlist" href="wishlist.html">
-                                                            <span class="icon">
-                                                                <i class="bardy bardy-wishlist"></i>
-                                                                <i class="hover-icon bardy bardy-wishlist"></i>
-                                                            </span>
-                                                        </a>
-                                                        <a class="add-quick-view" href="javascript:void(0);">
-                                                            <span class="icon">
-                                                                <i class="bardy bardy-quick-view"></i>
-                                                                <i class="hover-icon bardy bardy-quick-view"></i>
-                                                            </span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="product-desc">
-                                                <div class="product-info">
-                                                    <h4 class="title"><a asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">@item.Name</a></h4>
-                                                    <div class="star-content">
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                        <i class="fa fa-star-o"></i>
-                                                    </div>
-                                                    <div class="prices">
-                                                        @if (item.Discount != 0)
-                                                        {
-                                                            <span class="price">$ @(item.SellPrice - (item.SellPrice * (decimal)item.Discount / 100)) </span>
-                                                            <span class="price-old">$ @item.SellPrice</span>
-                                                        }
-                                                        else
-                                                        {
-                                                            <span class="price">$ @item.SellPrice</span>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--== End Shop Item ==-->
-                                </div>
-                            }
-                            
-                        </div>
-
-                        <!--== Add Swiper navigation Buttons ==-->
-                        <div class="swiper-button swiper-button-prev"><i class="fa fa-angle-left"></i></div>
-                        <div class="swiper-button swiper-button-next"><i class="fa fa-angle-right"></i></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    @await Component.InvokeAsync("NewArrivals")
+    
     <!--== End Product Area Wrapper ==-->
     <!--== Start Divider Area Wrapper ==-->
     <section class="divider-area divider-offer-area bg-color-222">

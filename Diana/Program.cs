@@ -11,6 +11,8 @@ builder.Services.AddDbContext<DianaDbContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionStrings:MSSql"]);
 });
 
+builder.Services.AddScoped<LayoutService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

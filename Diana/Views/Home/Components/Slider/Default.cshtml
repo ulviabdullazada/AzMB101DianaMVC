@@ -1,0 +1,28 @@
+﻿@model IEnumerable<SliderListItemVM>
+<section class="home-slider-area">
+    <div class="swiper-container swiper-slide-gap home-slider-container default-slider-container">
+        <div class="swiper-wrapper home-slider-wrapper slider-default">
+            @foreach (var slider in Model)
+            {
+                <div class="swiper-slide">
+                    <div class="slider-content-area" data-bg-img="@slider.ImageUrl">
+                        <div class="container">
+                            <div class="row align-items-center">
+                                <div class="col-12">
+                                    <div class='slider-content @(slider.IsLeft == true ? "text-start" : slider.IsLeft == false ? "text-end" : "text-center")'>
+                                        <h5 class="sub-title">@slider.Title</h5>
+                                        <h2 class="title">@slider.Text</h2>
+                                        <a class="btn-slider" href="shop.html">Shop Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="swiper-button-next"><i class="fa fa-angle-right"></i></div>
+        <div class="swiper-button-prev"><i class="fa fa-angle-left"></i></div>
+    </div>
+</section>
