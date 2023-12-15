@@ -65,5 +65,31 @@ namespace Diana.Controllers
             
             return PartialView("_ProductPaginationPartial", pag);
         }
+        //public string GetSession(string key)
+        //{
+        //    return HttpContext.Session.GetString(key);
+        //    //HttpContext.Session.Remove(key);
+        //}
+        //public void SetSession(string key, string value)
+        //{
+        //    HttpContext.Session.SetString(key, value);
+        //}
+        public string GetCookie(string key)
+        {
+            return HttpContext.Request.Cookies[key] ?? "";
+        }
+        public IActionResult GetBasket()
+        {
+            return ViewComponent("Basket");
+        }
+        //public void SetCookie(string key, string value)
+        //{
+        //    HttpContext.Response.Cookies.Append(key, value, new CookieOptions
+        //    {
+        //        //MaxAge = TimeSpan.FromSeconds(30),
+        //        Expires = DateTime.UtcNow.AddDays(-20)
+        //    });
+        //    //HttpContext.Response.Cookies.Delete(key);
+        //}
     }
 }

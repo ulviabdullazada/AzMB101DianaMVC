@@ -1,7 +1,10 @@
 ﻿using Diana.Contexts;
+using Diana.ViewModels.BasketVM;
 using Diana.ViewModels.ProductVM;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Diana.Controllers
 {
@@ -37,6 +40,30 @@ namespace Diana.Controllers
             }).SingleOrDefaultAsync(p => p.Id == id);
             if (data == null) return NotFound();
             return View(data);
+        }
+        public async Task<IActionResult> AddBasket(int? id)
+        {
+            if (id == null || id <= 0) return BadRequest();
+            if (!await _db.Products.AnyAsync(p=> p.Id == id)) return NotFound();
+            var basket = JsonConvert.DeserializeObject<List<BasketProductAndCountVM>>(HttpContext.Request.Cookies["basket"]??"[]");
+            var existItem = basket.Find(b=>b.Id == id);
+            if (existItem == null)
+            {
+                basket.Add(new BasketProductAndCountVM
+                {
+                    Id = (int)id,
+                    Count = 1
+                });
+            }
+            else
+            {
+                existItem.Count++;
+            }
+            HttpContext.Response.Cookies.Append("basket", JsonConvert.SerializeObject(basket), new CookieOptions
+            {
+                MaxAge = TimeSpan.MaxValue
+            });
+            return Ok();
         }
     }
 }

@@ -10,6 +10,9 @@ builder.Services.AddDbContext<DianaDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:MSSql"]);
 });
+builder.Services.AddSession();
+
+//builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<LayoutService>();
 
@@ -24,6 +27,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseSession();
 app.UseStaticFiles();
 
 app.UseRouting();

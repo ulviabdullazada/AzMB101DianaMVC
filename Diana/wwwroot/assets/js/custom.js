@@ -114,7 +114,7 @@
   $(".search-toggle").on('click', function() {
     $(".header-search").toggleClass("open").focus();
   });
-  $(".header-mini-cart .mini-cart-toggle").on('click', function() {
+  $("#basket").on('click', ".header-mini-cart .mini-cart-toggle", function () {
     $(".mini-cart-dropdown").toggleClass("show").focus();
   });
 
