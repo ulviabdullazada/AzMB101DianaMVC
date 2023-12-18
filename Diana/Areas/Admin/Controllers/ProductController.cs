@@ -4,6 +4,7 @@ using Diana.Helpers;
 using Diana.Models;
 using Diana.ViewModels.CommonVM;
 using Diana.ViewModels.ProductVM;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
