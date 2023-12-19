@@ -1,12 +1,14 @@
 ﻿using Diana.Contexts;
 using Diana.Models;
 using Diana.ViewModels.ColorVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diana.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin, Admin, Moderator")]
     public class ColorController : Controller
     {
         DianaDbContext _context { get; }

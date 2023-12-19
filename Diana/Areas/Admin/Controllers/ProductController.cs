@@ -4,7 +4,7 @@ using Diana.Helpers;
 using Diana.Models;
 using Diana.ViewModels.CommonVM;
 using Diana.ViewModels.ProductVM;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +13,7 @@ using NuGet.Packaging;
 namespace Diana.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin, Admin, Moderator")]
     public class ProductController : Controller
     {
         DianaDbContext _db { get; }
@@ -23,7 +24,6 @@ namespace Diana.Areas.Admin.Controllers
             _db = db;
             _env = env;
         }
-
         public async Task<IActionResult> Index()
         {
             int total = await _db.Products.CountAsync();
@@ -47,6 +47,7 @@ namespace Diana.Areas.Admin.Controllers
             
             return View(data);
         }
+        [AllowAnonymous]
         public async Task<IActionResult> ProductPagination(int page, int count)
         {
             int total = await _db.Products.CountAsync();
@@ -285,6 +286,14 @@ namespace Diana.Areas.Admin.Controllers
             {
                 data.ProductColors = vm.ColorIds.Select(c => new ProductColor { ColorId = c, ProductId = data.Id }).ToList();
             }
+            data.SellPrice = vm.SellPrice;
+            data.CostPrice = vm.CostPrice;
+            data.Name = vm.Name;
+            data.About = vm.About;
+            data.Description = vm.Description;
+            data.Discount = vm.Discount;
+            data.Quantity = vm.Quantity;
+            data.CategoryId = vm.CategoryId;
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

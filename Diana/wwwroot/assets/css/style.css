@@ -1454,7 +1454,7 @@ section .container-fluid {
   margin-bottom: 0;
 }
 .header-action-area .header-action .user-menu .user-dropdown.show {
-  height: 75px;
+  height: 120px;
   visibility: visible;
 }
 .header-action-area .header-action .user-menu:hover .title {

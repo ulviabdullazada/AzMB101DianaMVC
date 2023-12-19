@@ -1,12 +1,14 @@
 ﻿using Diana.Contexts;
 using Diana.Models;
 using Diana.ViewModels.SliderVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diana.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin, Admin, Moderator")]
     public class SliderController : Controller
     {
         DianaDbContext _db { get; }

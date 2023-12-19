@@ -1,11 +1,13 @@
 ﻿using Diana.Contexts;
 using Diana.ViewModels.CategoryVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diana.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "SuperAdmin, Admin, Moderator")]
     public class CategoryController : Controller
     {
         DianaDbContext _db { get; }
@@ -15,15 +17,11 @@ namespace Diana.Areas.Admin.Controllers
             _db = db;
         }
 
-        /*public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
-            return View(await _db.Categories.Select(c => new CategoryListItemVM {Id = c.Id, Name = c.Name}).ToListAsync());
-        }*/
-
-        public EmptyResult Index()
-        {
-            return new EmptyResult();
+            return View(await _db.Categories.Select(c => new CategoryListItemVM { Id = c.Id, Name = c.Name }).ToListAsync());
         }
+
         public IActionResult Create()
         {
             return View();

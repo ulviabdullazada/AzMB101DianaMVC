@@ -91,5 +91,9 @@ namespace Diana.Controllers
         //    });
         //    //HttpContext.Response.Cookies.Delete(key);
         //}
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
