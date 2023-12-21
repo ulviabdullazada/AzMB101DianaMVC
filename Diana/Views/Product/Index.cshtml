@@ -1,0 +1,350 @@
+﻿@using Diana.Models;
+@model IEnumerable<AdminProductListItemVM>
+@{
+    ViewData["Title"] = "Index";
+}
+@section scripts{
+    <script>
+        $("#filter").submit(function (ev) {
+            ev.preventDefault();
+            getDatas();
+        })
+        function sendFetch(formSerialize) {
+            fetch("https://localhost:7149/Product/ProductFilter?" + formSerialize)
+                .then(res => res.text())
+                .then(data => $("#nav-grid .row").html(data))
+        }
+        $("#nav-grid").on("click", ".page-link", function(ev){
+            ev.preventDefault();
+            var params = $(this).attr("href").split("?")[1]
+            var formSerialize = $("#filter").serialize() + "&" + params;
+            sendFetch(formSerialize);
+        })
+        $("#search-inp").keyup(function () {
+            getDatas();
+        })
+        $("input[name='catIds'], input[name='colorIds']").change(function () {
+            getDatas();
+        })
+        function getDatas() { 
+            var formSerialize = $("#filter").serialize();
+            sendFetch(formSerialize);
+        }
+    </script>
+}
+<!--== Start Page Header Area Wrapper ==-->
+<div class="page-header-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="page-header-content">
+                    <h4 class="title" data-aos="fade-down" data-aos-duration="1200">Products</h4>
+                    <nav class="breadcrumb-area" data-aos="fade-down" data-aos-duration="1000">
+                        <ul class="breadcrumb">
+                            <li><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-sep">-</li>
+                            <li>Products</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--== End Page Header Area Wrapper ==-->
+<!--== Start Product Area Wrapper ==-->
+<section class="product-area product-grid-list-area">
+    <div class="container">
+        <div class="row flex-row-reverse">
+            <div class="col-lg-9">
+                <div class="product-header-wrap">
+                    <div class="grid-list-option">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" id="nav-grid-tab" data-bs-toggle="tab" data-bs-target="#nav-grid" type="button" role="tab" aria-controls="nav-grid" aria-selected="true"><span data-bg-img="assets/img/icons/1.webp"></span></button>
+                                <button class="nav-link" id="nav-list-tab" data-bs-toggle="tab" data-bs-target="#nav-list" type="button" role="tab" aria-controls="nav-list" aria-selected="false"><span data-bg-img="assets/img/icons/1.webp"></span></button>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="show-product-area">
+                        <p class="show-product">Showing 1 - 15 of 33 result</p>
+                    </div>
+                    <div class="nav-short-area">
+                        <div class="toolbar-shorter">
+                            <label for="SortBy">Sort by</label>
+                            <select id="SortBy" class="form-select" aria-label="Sort by">
+                                <option value="manual">Featured</option>
+                                <option value="best-selling">Best Selling</option>
+                                <option value="title-ascending" selected>Alphabetically, A-Z</option>
+                                <option value="title-descending">Alphabetically, Z-A</option>
+                                <option value="price-ascending">Price, low to high</option>
+                                <option value="price-descending">Price, high to low</option>
+                                <option value="created-descending">Date, new to old</option>
+                                <option value="created-ascending">Date, old to new</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-body-wrap">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-grid" role="tabpanel" aria-labelledby="nav-grid-tab">
+                            <div class="row">
+                                @foreach (var item in Model)
+                                {
+                                    <div class="col-sm-6 col-xl-3">
+                                        <!--== Start Shop Item ==-->
+                                        <div class="product-item">
+                                            <div class="inner-content">
+                                                <div class="product-thumb">
+                                                    <a href="shop-single.html">
+                                                        <img class="w-100" src="~/@item.ImageUrl" alt="Image-HasTech">
+                                                    </a>
+                                                    <div class="product-action">
+                                                        <div class="addto-wrap">
+                                                            <a class="add-cart" asp-action="AddBasket" asp-controller="Product" asp-route-id="@item.Id">
+                                                                <span class="icon">
+                                                                    <i class="bardy bardy-shopping-cart"></i>
+                                                                    <i class="hover-icon bardy bardy-shopping-cart"></i>
+                                                                </span>
+                                                            </a>
+                                                            <a class="add-quick-view" href="javascript:void(0);">
+                                                                <span class="icon">
+                                                                    <i class="bardy bardy-quick-view"></i>
+                                                                    <i class="hover-icon bardy bardy-quick-view"></i>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="product-desc">
+                                                    <div class="product-info">
+                                                        <h4 class="title"><a asp-action="Details" asp-controller="Product" asp-route-id="@item.Id">@item.Name</a></h4>
+                                                        <div class="star-content">
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                        <div class="prices">
+                                                            @if (item.Discount != 0)
+                                                            {
+                                                                <span class="price">$ @(item.SellPrice - (item.SellPrice * (decimal)item.Discount / 100)) </span>
+                                                                <span class="price-old">$ @item.SellPrice</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="price">$ @item.SellPrice</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--== End Shop Item ==-->
+                                    </div>
+                                }
+                               
+
+                            </div>
+                           @*  <div class="row">
+                                <div class="col-12">
+                                    <div class="pagination-content-wrap">
+                                        <nav class="pagination-nav">
+                                            <ul class="pagination justify-content-center">
+                                                <li><a class="disabled active prev" href="#/"><i class="fa fa-angle-left"></i>Back</a></li>
+                                                <li><a class="disabled" href="#/">1</a></li>
+                                                <li><a href="#/">2</a></li>
+                                                <li><a href="#/">3</a></li>
+                                                <li><a class="next" href="#/">Next <i class="fa fa-angle-right"></i></a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div> *@
+                        </div>
+                        <div class="tab-pane fade" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <!--== Start Shop Item ==-->
+                                    <div class="product-item product-item-list">
+                                        <div class="inner-content">
+                                            <div class="product-thumb">
+                                                <a href="shop-single.html">
+                                                    <img class="w-100" src="assets/img/shop/1.jpg" alt="Image-HasTech">
+                                                </a>
+                                            </div>
+                                            <div class="product-desc">
+                                                <div class="product-info">
+                                                    <h4 class="title"><a href="shop-single.html">1. New and sale badge product</a></h4>
+                                                    <div class="star-content">
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                        <i class="fa fa-star-o"></i>
+                                                    </div>
+                                                    <div class="prices">
+                                                        <span class="price">Tk 110.00 </span>
+                                                        <span class="price-old">Tk 130.00</span>
+                                                    </div>
+                                                    <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,</p>
+                                                    <div class="product-action">
+                                                        <div class="addto-wrap">
+                                                            <a class="add-cart" href="shop-cart.html">
+                                                                <span class="icon">
+                                                                    <i class="bardy bardy-shopping-cart"></i>
+                                                                    <i class="hover-icon bardy bardy-shopping-cart"></i>
+                                                                </span>
+                                                            </a>
+                                                            <a class="add-wishlist" href="wishlist.html">
+                                                                <span class="icon">
+                                                                    <i class="bardy bardy-wishlist"></i>
+                                                                    <i class="hover-icon bardy bardy-wishlist"></i>
+                                                                </span>
+                                                            </a>
+                                                            <a class="add-quick-view" href="javascript:void(0);">
+                                                                <span class="icon">
+                                                                    <i class="bardy bardy-quick-view"></i>
+                                                                    <i class="hover-icon bardy bardy-quick-view"></i>
+                                                                </span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--== End Shop Item ==-->
+                                </div>
+                            </div>
+                            <!--== Start Pagination Wrap ==-->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="pagination-content-wrap">
+                                        <nav class="pagination-nav">
+                                            <ul class="pagination justify-content-center">
+                                                <li><a class="disabled active prev" href="#/"><i class="fa fa-angle-left"></i>Back</a></li>
+                                                <li><a class="disabled" href="#/">1</a></li>
+                                                <li><a href="#/">2</a></li>
+                                                <li><a href="#/">3</a></li>
+                                                <li><a class="next" href="#/">Next <i class="fa fa-angle-right"></i></a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--== End Pagination Wrap ==-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <form id="filter">
+                    <div class="product-sidebar-wrapper">
+                        <!--== Start Product Sidebar Item ==-->
+                        <div class="product-sidebar-item">
+                            <h4 class="product-sidebar-title">Search</h4>
+                            <div class="product-sidebar-body">
+                                <div class="product-sidebar-search-form">
+                                        <div class="form-group">
+                                            <input class="form-control" id="search-inp" type="search" name="q" placeholder="Enter key words">
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--== End Product Sidebar Item ==-->
+                        <!--== Start Sidebar Item ==-->
+                        <div class="product-sidebar-item">
+                            <h4 class="product-sidebar-title">Categories</h4>
+                            <div class="product-sidebar-body">
+                                <div class="product-sidebar-nav-menu">
+                                    @foreach (var cat in (IEnumerable<Category>)ViewBag.Categories)
+                                    {
+                                        <input name="catIds" type="checkbox" value="@cat.Id" id="cat-@cat.Id" />
+                                        <label for="cat-@cat.Id">@cat.Name (@cat.Products?.Count())</label>
+                                        <br />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <!--== Start Sidebar Item ==-->
+                        <div class="product-sidebar-item mb-5 pb-2">
+                            <h4 class="product-sidebar-title">Color</h4>
+                            <div class="product-sidebar-body">
+                                <div class="product-sidebar-color-menu">
+                                    @foreach (var color in (IEnumerable<Color>)ViewBag.Colors)
+                                    {
+                                        <input name="colorIds" class="colors" style="display:none;" type="checkbox" value="@color.Id" id="color-@color.Id" />
+                                        <label class="colors-label" for="color-@color.Id"><div class="red" style="background:#@color.Hexcode"></div></label>
+                                    }
+                                    
+                                </div>
+                            </div>
+                        </div>
+                       @*  <div class="form-group">
+                            <button type="submit" class="btn-outline-secondary btn w-100">Filter</button>
+                        </div> *@
+                        <!--== End Sidebar Item ==-->
+
+                    </div>
+                </form>
+
+                <!--== End Product Sidebar Wrapper ==-->
+            </div>
+        </div>
+    </div>
+</section>
+<!--== End Product Area Wrapper ==-->
+<!--== Start Feature Area Wrapper ==-->
+<section class="feature-area">
+    <div class="feature-container">
+        <div class="row no-gutter">
+            <div class="feature-col col-xl-3 col-md-6 col-12">
+                <div class="feature-icon-box">
+                    <div class="inner-content">
+                        <div class="icon-box" data-bg-img="assets/img/icons/1.jpg"></div>
+                        <div class="content">
+                            <h3 class="title">Free home delivery</h3>
+                            <p>Provide free home delivery for all product over $100</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-col col-xl-3 col-md-6 col-12">
+                <div class="feature-icon-box">
+                    <div class="inner-content">
+                        <div class="icon-box" data-bg-img="assets/img/icons/1.jpg"></div>
+                        <div class="content">
+                            <h3 class="title">Quality Products</h3>
+                            <p>We ensure the product quality that is our main goal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-col col-xl-3 col-md-6 col-12">
+                <div class="feature-icon-box">
+                    <div class="inner-content">
+                        <div class="icon-box" data-bg-img="assets/img/icons/1.jpg"></div>
+                        <div class="content">
+                            <h3 class="title">3 Days Return</h3>
+                            <p>Return product within 3 days for any product you buy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-col col-xl-3 col-md-6 col-12">
+                <div class="feature-icon-box">
+                    <div class="inner-content">
+                        <div class="icon-box" data-bg-img="assets/img/icons/1.jpg"></div>
+                        <div class="content">
+                            <h3 class="title">Online Support</h3>
+                            <p>We ensure the product quality that you can trust easily</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--== End Feature Area Wrapper ==-->

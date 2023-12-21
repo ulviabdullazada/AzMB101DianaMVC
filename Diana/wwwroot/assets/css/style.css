@@ -5527,6 +5527,10 @@ section .container-fluid {
   border: 1px solid #fff;
   outline: 2px solid #ff383f;
 }
+.colors:checked + .colors-label div {
+    border: 1px solid #fff;
+    outline: 2px solid #ff383f;
+}
 .product-sidebar-size-menu ul li a {
   color: #222;
   font-size: 15px;

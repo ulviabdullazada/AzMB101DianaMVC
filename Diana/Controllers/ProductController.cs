@@ -1,5 +1,8 @@
-﻿using Diana.Contexts;
+﻿using Diana.Areas.Admin.ViewModels;
+using Diana.Contexts;
+using Diana.Helpers;
 using Diana.ViewModels.BasketVM;
+using Diana.ViewModels.CommonVM;
 using Diana.ViewModels.ProductVM;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,9 +20,61 @@ namespace Diana.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? q, List<int>? catIds,List<int>? colorIds)
         {
-            return View();
+            ViewBag.Categories = _db.Categories.Include(c=>c.Products);
+            ViewBag.Colors = _db.Colors;
+            var query = _db.Products.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                query = query.Where(p => p.Name.Contains(q));
+            }
+            if (catIds != null && catIds.Any())
+            {
+                query = query.Where(p => catIds.Contains(p.CategoryId));
+            }
+            if (colorIds != null && colorIds.Any())
+            {
+                var prodIds = _db.ProductColors.Where(c => colorIds.Contains(c.ColorId)).Select(c=>c.ProductId).AsQueryable();
+                query = query.Where(p => prodIds.Contains(p.Id));
+            }
+            return View(query.Select(p => new AdminProductListItemVM
+            {
+                Id = p.Id,
+                Category = p.Category,
+                Discount = p.Discount,
+                Name = p.Name,
+                ImageUrl = p.ImageUrl,
+                SellPrice = p.SellPrice
+            }));
+        }
+        public async Task<IActionResult> ProductFilter(string? q, List<int>? catIds, List<int>? colorIds, int page = 1, int take = 8)
+        {
+            var query = _db.Products.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                query = query.Where(p => p.Name.Contains(q));
+            }
+            if (catIds != null && catIds.Any())
+            {
+                query = query.Where(p => catIds.Contains(p.CategoryId));
+            }
+            if (colorIds != null && colorIds.Any())
+            {
+                var prodIds = _db.ProductColors.Where(c => colorIds.Contains(c.ColorId)).Select(c => c.ProductId).AsQueryable();
+                query = query.Where(p => prodIds.Contains(p.Id));
+            }
+            int count = await query.CountAsync();
+            PaginatonVM<IEnumerable<AdminProductListItemVM>> pag = new PaginatonVM<IEnumerable<AdminProductListItemVM>>(count, page, (int)Math.Ceiling((decimal)count / take), query.AddPagination(page, take).Select(p => new AdminProductListItemVM
+            {
+                Id = p.Id,
+                Category = p.Category,
+                Discount = p.Discount,
+                Name = p.Name,
+                ImageUrl = p.ImageUrl,
+                SellPrice = p.SellPrice
+            }));
+            return PartialView("_ProductPaginationPartial", pag);
         }
         public async Task<IActionResult> Details(int? id)
         {

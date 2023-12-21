@@ -30,6 +30,10 @@ namespace Diana.Controllers
         public async Task<IActionResult> Login(string? returnUrl,LoginVM vm)
         {
             AppUser user;
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
             if (vm.UsernameOrEmail.Contains("@"))
             {
                 user = await _userManager.FindByEmailAsync(vm.UsernameOrEmail);
